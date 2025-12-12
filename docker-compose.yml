@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=dilli03
+      - POSTGRES_DB=compose-practice
+    volumes:
+      - practice-volume:/var/lib/postgresql/data
+
+  practice_app:
+    build:
+      network: host
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://postgres:dilli03@postgres:5432/compose-practice
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+volumes:
+  practice-volume:
